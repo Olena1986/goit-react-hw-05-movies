@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { NavBar } from '../Pages/NavBar/NavBar';
+import { NavBar } from './NavBar/NavBar';
 
 
 const SearchMovies = lazy(() => import('../Pages/SearchMovies/SearchMovies'));

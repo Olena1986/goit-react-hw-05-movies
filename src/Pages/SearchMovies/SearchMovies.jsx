@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { PropTypes } from 'prop-types';
+import { Link, useSearchParams } from 'react-router-dom';
 import { SearchStyle } from './SearchMovies.styled';
 
 
 const SearchMovies = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState([]);
-  const [searched, setSearched] = useState(false);
   const apiKey = '9477f76437eb927cec9a7f94dd098501';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searched, setSearched] = useState(false); 
+  const query = searchParams.get('q');
 
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
-  const handleSearch = () => {
+   useEffect(() => {
+    if (query === '' || query === null) {
+      return;
+    }
     axios
-      .get(`http://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchTerm}`)
-      .then((response) => {
-        setMovies(response.data.results);
+      .get(
+        `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1&api_key=${apiKey}`
+      )
+       .then(res => setMovies(res.data.results));
         setSearched(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  }, [query]);
+
+  const handleSearch = e => {
+    e.preventDefault();
+    const searchValue = e.target.elements.search.value;
+    if (searchValue === '') {
+      return;
+    }
+    setSearchParams({ q: searchValue });
+
+    e.target.reset();
   };
 
   const noMoviesFound = movies.length === 0 && searched;
 
   return (
-    <div>
+    <form onSubmit={handleSearch}>
     <SearchStyle.SearchWrap>
         <input
+          name="search"
           type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
           placeholder="Enter a keyword"
         />
-        <button onClick={handleSearch}>Search</button>
+        <button type='submit'>Search</button>
     </SearchStyle.SearchWrap>
 
       {movies.length > 0 ? (
@@ -52,7 +59,7 @@ const SearchMovies = () => {
       ) : (
         noMoviesFound && <p>No movies found.</p>
       )}
-    </div>
+    </form>
   );
 };
 
@@ -61,6 +68,3 @@ export default SearchMovies;
 
 
 
-SearchMovies.propTypes = {
-  movieId: PropTypes.string,
-};

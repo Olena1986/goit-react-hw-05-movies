@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom'
-import PropTypes from 'prop-types';
 import { NavBarStyle } from './NavBar.styled';
 
 
@@ -20,6 +19,3 @@ export const NavBar = () => {
 		</NavBarStyle.NavWrap>
 	)
 }
-NavBar.propTypes = {
-  title: PropTypes.string,
-};

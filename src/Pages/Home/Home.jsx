@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 
 const Home = () => {
@@ -28,7 +27,7 @@ const Home = () => {
     <div>
       <h1>Trending Today</h1>
       <ul>
-        {movies && movies.map((movie) => (
+        {movies.length > 0 && movies.map((movie) => (
           <li key={movie.id}>
              <NavLink to={`movies/${movie.id.toString()}`}>{movie.title}</NavLink>
           </li>
@@ -40,11 +39,3 @@ const Home = () => {
 
 export default Home;
 
-Home.propTypes = {
-movies: PropTypes.arrayOf(
-PropTypes.shape({
-id: PropTypes.number,
-title: PropTypes.string,
-})
-),
-};

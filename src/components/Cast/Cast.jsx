@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { CastStyle } from './Cast.styled';
 
 const Cast = () => {
@@ -55,6 +54,3 @@ const Cast = () => {
 
 export default Cast;
 
-Cast.propTypes = {
-  movieId: PropTypes.string,
-};
