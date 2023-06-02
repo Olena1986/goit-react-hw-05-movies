@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { MovieDetailStyle } from './MovieDetail.styled';
 
@@ -7,6 +7,7 @@ const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -28,10 +29,18 @@ const MovieDetails = () => {
     return <div>Loading...</div>;
   }
 
+const handleGoBack = () => {
+  if (location.state?.from) {
+    navigate(location.state.from); 
+  } else {
+    navigate('/');
+  }
+};
+
   return (
    <>
       
-        <button type="button" onClick={() => navigate('/')}>
+        <button type="button" onClick={handleGoBack}>
           Go back
       </button>
       <MovieDetailStyle.MovieDetailsContainer>
@@ -51,8 +60,8 @@ const MovieDetails = () => {
          </MovieDetailStyle.MovieDetailsContainer>
        <MovieDetailStyle.MovieAdition>
           <MovieDetailStyle.StyleSubtitle>Additional information</MovieDetailStyle.StyleSubtitle>
-          <MovieDetailStyle.StyledLink to="cast">Cast</MovieDetailStyle.StyledLink>
-          <MovieDetailStyle.StyledLink to="reviews">Reviews</MovieDetailStyle.StyledLink>
+          <MovieDetailStyle.StyledLink to="cast" state={{ from: location?.state?.from }}>Cast</MovieDetailStyle.StyledLink>
+          <MovieDetailStyle.StyledLink to="reviews" state={{ from: location?.state?.from }}>Reviews</MovieDetailStyle.StyledLink>
        </MovieDetailStyle.MovieAdition>
         <Outlet/>
      
